@@ -39,6 +39,7 @@ install_requires = [
     'networkx',
     'pymessenger',
     'pykwalify',
+    'python-telegram-bot'
 ]
 
 extras_requires = {

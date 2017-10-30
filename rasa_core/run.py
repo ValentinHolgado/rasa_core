@@ -12,6 +12,7 @@ from rasa_core.agent import Agent
 from rasa_core.channels.console import ConsoleInputChannel
 from rasa_core.channels.facebook import FacebookInput
 from rasa_core.channels.rest import HttpInputChannel
+from rasa_core.channels.telegram import TelegramInputChannel
 from rasa_core.utils import read_yaml_file
 
 logger = logging.getLogger()  # get the root logger
@@ -55,7 +56,7 @@ def create_argument_parser():
     parser.add_argument(
             '-c', '--connector',
             default="cmdline",
-            choices=["facebook", "cmdline"],
+            choices=["facebook", "cmdline", "telegram"],
             help="service to connect to")
 
     return parser
@@ -82,6 +83,8 @@ def create_input_channel(channel, port, credentials_file):
         return HttpInputChannel(port, None, input_blueprint)
     elif channel == "cmdline":
         return ConsoleInputChannel()
+    elif channel == "telegram":
+        return TelegramInputChannel()
     else:
         raise Exception("Unknown input channel for running main.")
 
