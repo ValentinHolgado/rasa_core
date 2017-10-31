@@ -9,7 +9,7 @@ from rasa_core.channels.channel import InputChannel, OutputChannel, UserMessage
 
 
 class TelegramOutputChannel(OutputChannel):
-    """A bot that uses fb-messenger to communicate."""
+    """An output channel that uses a Telegram bot to communicate."""
 
     def __init__(self, bot, update):
         self.bot = bot
@@ -21,12 +21,12 @@ class TelegramOutputChannel(OutputChannel):
 
 
 class TelegramInputChannel(InputChannel):
-    """Input channel that reads the user messages from the command line."""
+    """Input channel that reads the user messages from Telegram using a bot."""
 
-    def __init__(self, telegram_token="452404820:AAElhaiMlcFdeuMNYYnS5n-1z0xlKTY5Xe4"):
+    def __init__(self, telegram_token):
         self.message_handler = None
         updater = Updater(telegram_token)
-        # Get the dispatcher to register handlers
+
         dispatcher = updater.dispatcher
         self.bot = dispatcher.bot
 
@@ -36,6 +36,7 @@ class TelegramInputChannel(InputChannel):
         updater.start_polling()
 
     def _handle_message(self, bot, update):
+        """Handle messages using a Telegram bot"""
         if self.message_handler is None:
             raise Exception("Message handler has not been assigned")
         self.message_handler(UserMessage(update.message.text, TelegramOutputChannel(bot, update)))

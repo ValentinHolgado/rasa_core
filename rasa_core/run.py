@@ -80,6 +80,16 @@ def _create_facebook_channel(channel, port, credentials_file):
     return HttpInputChannel(port, None, input_blueprint)
 
 
+def _create_telegram_channel(credentials_file):
+    if credentials_file is None:
+        raise Exception("To use the Telegram input channel, you need to "
+                        "pass a credentials file using '--credentials'. "
+                        "The argument should be a file path pointing to"
+                        "a yml file containing the access token.")
+    credentials = read_yaml_file(credentials_file)
+    return TelegramInputChannel(credentials.get("telegram_access_token"))
+
+
 def create_input_channel(channel, port, credentials_file):
     """Instantiate the chosen input channel."""
 
@@ -88,7 +98,7 @@ def create_input_channel(channel, port, credentials_file):
     elif channel == "cmdline":
         return ConsoleInputChannel()
     elif channel == "telegram":
-        return TelegramInputChannel()
+        return _create_telegram_channel(credentials_file)
     else:
         try:
             c = utils.class_from_module_path(channel)
